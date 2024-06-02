@@ -36,12 +36,12 @@ public class ChapterRepository {
             try {
 
                 String queryParams = "/?id=" + URLEncoder.encode(id, "UTF-8") ;
-                URL url = new URL("http://10.0.2.2:8080/mangamania/chapter");
+                URL url = new URL("http://10.0.2.2:8080/mangamania/chapter"+queryParams);
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
                 urlConnection.setRequestProperty("Accept", "application/json");
 
-                // Read response
+
                 int responseCode = urlConnection.getResponseCode();
 
                 if (responseCode == HttpURLConnection.HTTP_OK) {
@@ -58,13 +58,13 @@ public class ChapterRepository {
 
                         // list of manga or []
                         if (! jsonResponse.isEmpty()) {
-                            // Send success message back to the main thread
+
                             Message message = uiHandler.obtainMessage();
                             message.what = 1; // success
                             message.obj = jsonResponse;
                             uiHandler.sendMessage(message);
                         } else {
-                            // Send the error message back to the main thread
+
                             Message message = uiHandler.obtainMessage();
                             message.what = 0; // failure
                             message.obj = jsonResponse;
@@ -72,7 +72,7 @@ public class ChapterRepository {
                         }
                     }
                 } else {
-                    // Handle the error response
+
                     Message message = uiHandler.obtainMessage();
                     message.what = 0; // failure
                     message.obj = "Could not get chapters" + responseCode;
@@ -109,7 +109,7 @@ public class ChapterRepository {
                 urlConnection.setRequestProperty("Accept", "application/json");
                 urlConnection.setDoOutput(true);
 
-                // Read response
+
                 int responseCode = urlConnection.getResponseCode();
 
 
@@ -127,13 +127,13 @@ public class ChapterRepository {
 
                         // list of manga or []
                         if (! jsonResponse.isEmpty()) {
-                            // Send success message back to the main thread
+
                             Message message = uiHandler.obtainMessage();
                             message.what = 1; // success
                             message.obj = jsonResponse;
                             uiHandler.sendMessage(message);
                         } else {
-                            // Send the error message back to the main thread
+
                             Message message = uiHandler.obtainMessage();
                             message.what = 0; // failure
                             message.obj = jsonResponse;
@@ -141,9 +141,9 @@ public class ChapterRepository {
                         }
                     }
                 } else {
-                    // Handle the error response
+
                     Message message = uiHandler.obtainMessage();
-                    message.what = 0; // failure
+                    message.what = 0;
                     message.obj = "Could not get mangas" + responseCode;
                     uiHandler.sendMessage(message);
                 }

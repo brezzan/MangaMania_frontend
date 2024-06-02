@@ -43,7 +43,7 @@ public class CommentsRepository {
                 urlConnection.setRequestProperty("Accept", "application/json");
                 urlConnection.setDoOutput(true);
 
-                // Read response
+
                 int responseCode = urlConnection.getResponseCode();
 
 
@@ -75,7 +75,7 @@ public class CommentsRepository {
                         }
                     }
                 } else {
-                    // Handle the error response
+
                     Message message = uiHandler.obtainMessage();
                     message.what = 0; // failure
                     message.obj = "Could not get mangas" + responseCode;
@@ -106,10 +106,10 @@ public class CommentsRepository {
         srv.execute(() -> {
             HttpURLConnection urlConnection = null;
             try {
-                // Create URL
+
                 URL url = new URL("http://10.0.2.2:8080/mangamania/comment/save");
 
-                // Create HttpURLConnection
+
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("POST");
                 urlConnection.setRequestProperty("Content-Type", "application/json; utf-8");
@@ -117,7 +117,7 @@ public class CommentsRepository {
                 urlConnection.setRequestProperty("token", token);
                 urlConnection.setDoOutput(true);
 
-                // Create JSON object with user credentials
+
                 JSONObject jsonParam = new JSONObject();
                 jsonParam.put("commentText", commentText);
                 jsonParam.put("rootComment", rootComment);
@@ -133,13 +133,13 @@ public class CommentsRepository {
                             response.append(inputLine);
                         }
 
-                        // Parse the response as JSON
+
                         Gson gson = new Gson();
                         ErrorResponse<String> jsonResponse;
                         try {
                             jsonResponse = gson.fromJson(response.toString(), new TypeToken<ErrorResponse<String>>() {}.getType());
                         } catch (JsonSyntaxException e) {
-                            // Handle JSON parsing error
+
                             Message message = uiHandler.obtainMessage();
                             message.what = 0; // failure
                             message.obj = "JSON Parsing error: " + e.getMessage();
@@ -148,7 +148,7 @@ public class CommentsRepository {
                             return;
                         }
 
-                        // Check response status and data
+
                         if ("OK".equals(jsonResponse.getStatus())) {
 
                             Message message = uiHandler.obtainMessage();
@@ -156,7 +156,7 @@ public class CommentsRepository {
                             message.obj = jsonResponse;
                             uiHandler.sendMessage(message);
                         } else {
-                            // Send the error message back to the main thread
+
                             Message message = uiHandler.obtainMessage();
                             message.what = 0; // failure
                             message.obj = jsonResponse.getData();
@@ -165,7 +165,7 @@ public class CommentsRepository {
                         }
                     }
                 } else {
-                    // Handle the error response
+
                     Message message = uiHandler.obtainMessage();
                     message.what = 0; // failure
                     message.obj = "Signup failed: " + responseCode;
@@ -200,7 +200,7 @@ public class CommentsRepository {
 
                 URL url = new URL("http://10.0.2.2:8080/mangamania/comment/like/"+queryParams);
 
-                // Create HttpURLConnection
+
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("PUT");
                 urlConnection.setRequestProperty("Content-Type", "application/json; utf-8");
@@ -219,13 +219,12 @@ public class CommentsRepository {
                             response.append(inputLine);
                         }
 
-                        // Parse the response as JSON
                         Gson gson = new Gson();
                         ErrorResponse<String> jsonResponse;
                         try {
                             jsonResponse = gson.fromJson(response.toString(), new TypeToken<ErrorResponse<String>>() {}.getType());
                         } catch (JsonSyntaxException e) {
-                            // Handle JSON parsing error
+
                             Message message = uiHandler.obtainMessage();
                             message.what = 0; // failure
                             message.obj = "JSON Parsing error: " + e.getMessage();
@@ -234,7 +233,7 @@ public class CommentsRepository {
                             return;
                         }
 
-                        // Check response status and data
+
                         if ("OK".equals(jsonResponse.getStatus())) {
 
                             Message message = uiHandler.obtainMessage();
@@ -242,7 +241,7 @@ public class CommentsRepository {
                             message.obj = jsonResponse;
                             uiHandler.sendMessage(message);
                         } else {
-                            // Send the error message back to the main thread
+
                             Message message = uiHandler.obtainMessage();
                             message.what = 0; // failure
                             message.obj = jsonResponse.getData();
@@ -251,7 +250,7 @@ public class CommentsRepository {
                         }
                     }
                 } else {
-                    // Handle the error response
+
                     Message message = uiHandler.obtainMessage();
                     message.what = 0; // failure
                     message.obj = "Signup failed: " + responseCode;
@@ -284,7 +283,7 @@ public class CommentsRepository {
 
                 URL url = new URL("http://10.0.2.2:8080/mangamania/comment/dislike/"+queryParams);
 
-                // Create HttpURLConnection
+
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("PUT");
                 urlConnection.setRequestProperty("Content-Type", "application/json; utf-8");
@@ -303,7 +302,7 @@ public class CommentsRepository {
                             response.append(inputLine);
                         }
 
-                        // Parse the response as JSON
+
                         Gson gson = new Gson();
                         ErrorResponse<String> jsonResponse;
                         try {
@@ -335,7 +334,7 @@ public class CommentsRepository {
                         }
                     }
                 } else {
-                    // Handle the error response
+
                     Message message = uiHandler.obtainMessage();
                     message.what = 0; // failure
                     message.obj = "Signup failed: " + responseCode;
@@ -391,13 +390,13 @@ public class CommentsRepository {
                             response.append(inputLine);
                         }
 
-                        // Parse the response as JSON
+
                         Gson gson = new Gson();
                         ErrorResponse<String> jsonResponse;
                         try {
                             jsonResponse = gson.fromJson(response.toString(), new TypeToken<ErrorResponse<String>>() {}.getType());
                         } catch (JsonSyntaxException e) {
-                            // Handle JSON parsing error
+
                             Message message = uiHandler.obtainMessage();
                             message.what = 0; // failure
                             message.obj = "JSON Parsing error: " + e.getMessage();
@@ -423,7 +422,7 @@ public class CommentsRepository {
                         }
                     }
                 } else {
-                    // Handle the error response
+
                     Message message = uiHandler.obtainMessage();
                     message.what = 0; // failure
                     message.obj = "Signup failed: " + responseCode;
@@ -457,8 +456,6 @@ public class CommentsRepository {
 
                 URL url = new URL("http://10.0.2.2:8080/mangamania/comment/delete/"+queryParams);
 
-
-                // Create HttpURLConnection
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("DELETE");
                 urlConnection.setRequestProperty("Content-Type", "application/json; utf-8");
@@ -477,13 +474,13 @@ public class CommentsRepository {
                             response.append(inputLine);
                         }
 
-                        // Parse the response as JSON
+
                         Gson gson = new Gson();
                         ErrorResponse<String> jsonResponse;
                         try {
                             jsonResponse = gson.fromJson(response.toString(), new TypeToken<ErrorResponse<String>>() {}.getType());
                         } catch (JsonSyntaxException e) {
-                            // Handle JSON parsing error
+
                             Message message = uiHandler.obtainMessage();
                             message.what = 0; // failure
                             message.obj = "JSON Parsing error: " + e.getMessage();
@@ -492,7 +489,7 @@ public class CommentsRepository {
                             return;
                         }
 
-                        // Check response status and data
+
                         if ("OK".equals(jsonResponse.getStatus())) {
 
                             Message message = uiHandler.obtainMessage();
@@ -500,7 +497,7 @@ public class CommentsRepository {
                             message.obj = jsonResponse;
                             uiHandler.sendMessage(message);
                         } else {
-                            // Send the error message back to the main thread
+
                             Message message = uiHandler.obtainMessage();
                             message.what = 0; // failure
                             message.obj = jsonResponse.getData();
@@ -509,7 +506,6 @@ public class CommentsRepository {
                         }
                     }
                 } else {
-                    // Handle the error response
                     Message message = uiHandler.obtainMessage();
                     message.what = 0; // failure
                     message.obj = "Signup failed: " + responseCode;

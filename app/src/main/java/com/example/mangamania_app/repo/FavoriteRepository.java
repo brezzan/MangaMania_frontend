@@ -18,7 +18,7 @@ import java.util.concurrent.ExecutorService;
 
 public class FavoriteRepository {
 
-    // get favorite farklı tipte cevap veriyorrrr
+    // get favorite farklı tipte cevap veriyorrrr  düzelttt
 
     public void getFavoriteManga(ExecutorService srv, Handler uiHandler, String token) {
 
@@ -34,7 +34,6 @@ public class FavoriteRepository {
                 urlConnection.setDoOutput(true);
 
 
-                // Read response
                 int responseCode = urlConnection.getResponseCode();
 
 
@@ -59,7 +58,7 @@ public class FavoriteRepository {
                             message.obj = jsonResponse;
                             uiHandler.sendMessage(message);
                         } else {
-                            // Send the error message back to the main thread
+
                             Message message = uiHandler.obtainMessage();
                             message.what = 0; // failure
                             message.obj = jsonResponse;
@@ -67,7 +66,7 @@ public class FavoriteRepository {
                         }
                     }
                 } else {
-                    // Handle the error response
+
                     Message message = uiHandler.obtainMessage();
                     message.what = 0; // failure
                     message.obj = "Could not get mangas" + responseCode;
@@ -104,7 +103,6 @@ public class FavoriteRepository {
                 urlConnection.setDoOutput(true);
 
 
-                // Read response
                 int responseCode = urlConnection.getResponseCode();
 
 
@@ -120,15 +118,15 @@ public class FavoriteRepository {
                         Gson gson = new Gson();
                         ErrorResponse<String> jsonResponse = gson.fromJson(response.toString(), new TypeToken<ErrorResponse<String>>() {}.getType());
 
-                        // Check response status and data
+
                         if ("OK".equals(jsonResponse.getStatus())) {
-                            // Send success message back to the main thread
+
                             Message message = uiHandler.obtainMessage();
                             message.what = 1; // success
                             message.obj = jsonResponse;
                             uiHandler.sendMessage(message);}
                         else {
-                            // Send the error message back to the main thread
+
                             Message message = uiHandler.obtainMessage();
                             message.what = 0; // failure
                             message.obj = jsonResponse;
@@ -136,7 +134,7 @@ public class FavoriteRepository {
                         }
                     }
                 } else {
-                    // Handle the error response
+
                     Message message = uiHandler.obtainMessage();
                     message.what = 0; // failure
                     message.obj = "Could not get mangas" + responseCode;
@@ -161,7 +159,7 @@ public class FavoriteRepository {
             HttpURLConnection urlConnection = null;
             try {
 
-                // query param is like this
+
                 String queryParams = "/?mangaId=" + URLEncoder.encode(mangaId, "UTF-8") ;
 
                 URL url = new URL("http://10.0.2.2:8080/mangamania/manga/unfavorite"+queryParams);
@@ -173,7 +171,7 @@ public class FavoriteRepository {
                 urlConnection.setDoOutput(true);
 
 
-                // Read response
+
                 int responseCode = urlConnection.getResponseCode();
 
 
@@ -189,7 +187,7 @@ public class FavoriteRepository {
                         Gson gson = new Gson();
                         ErrorResponse<String> jsonResponse = gson.fromJson(response.toString(), new TypeToken<ErrorResponse<String>>() {}.getType());
 
-                        // Check response status and data
+
                         if ("OK".equals(jsonResponse.getStatus())) {
                             // Send success message back to the main thread
                             Message message = uiHandler.obtainMessage();
@@ -197,7 +195,7 @@ public class FavoriteRepository {
                             message.obj = jsonResponse;
                             uiHandler.sendMessage(message);}
                         else {
-                            // Send the error message back to the main thread
+
                             Message message = uiHandler.obtainMessage();
                             message.what = 0; // failure
                             message.obj = jsonResponse;
@@ -205,7 +203,7 @@ public class FavoriteRepository {
                         }
                     }
                 } else {
-                    // Handle the error response
+
                     Message message = uiHandler.obtainMessage();
                     message.what = 0; // failure
                     message.obj = "Could not get mangas" + responseCode;

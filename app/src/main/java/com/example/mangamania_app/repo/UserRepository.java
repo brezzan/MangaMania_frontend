@@ -28,22 +28,20 @@ public class UserRepository {
         srv.execute(() -> {
             HttpURLConnection urlConnection = null;
             try {
-                // Create URL
-                URL url = new URL("http://10.0.2.2:8080/mangamania/login");
 
-                // Create HttpURLConnection
+                URL url = new URL("http://10.0.2.2:8080/mangamania/login");
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("POST");
                 urlConnection.setRequestProperty("Content-Type", "application/json; utf-8");
                 urlConnection.setRequestProperty("Accept", "application/json");
                 urlConnection.setDoOutput(true);
 
-                // Create JSON object with user credentials
+                // body
                 JSONObject jsonParam = new JSONObject();
                 jsonParam.put("username", username);
                 jsonParam.put("password", password);
 
-                // Write JSON to output stream
+
                 try (OutputStream os = urlConnection.getOutputStream();
                      BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"))) {
                     writer.write(jsonParam.toString());
@@ -61,7 +59,7 @@ public class UserRepository {
                             response.append(inputLine);
                         }
 
-                        // Parse the response as JSON
+
                         Gson gson = new Gson();
                         ErrorResponse<Token> jsonResponse;
                         try {
@@ -76,7 +74,6 @@ public class UserRepository {
                             return;
                         }
 
-                        // Check response status and data
                         if ("OK".equals(jsonResponse.getStatus())) {
 
                             Message message = uiHandler.obtainMessage();
@@ -84,7 +81,7 @@ public class UserRepository {
                             message.obj = jsonResponse;
                             uiHandler.sendMessage(message);
                         } else {
-                            // Send the error message back to the main thread
+
                             Message message = uiHandler.obtainMessage();
                             message.what = 0; // failure
                             message.obj = jsonResponse.getData();
@@ -93,7 +90,7 @@ public class UserRepository {
                         }
                     }
                 } else {
-                    // Handle the error response
+
                     Message message = uiHandler.obtainMessage();
                     message.what = 0; // failure
                     message.obj = "Login failed: " + responseCode;
@@ -120,16 +117,13 @@ public class UserRepository {
         srv.execute(() -> {
             HttpURLConnection urlConnection = null;
             try {
-                // Create URL
                 URL url = new URL("http://10.0.2.2:8080/mangamania/logout");
 
-                // Create HttpURLConnection
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
                 urlConnection.setRequestProperty("token", token);
                 urlConnection.setRequestProperty("Accept", "application/json");
 
-                // Read response
                 int responseCode = urlConnection.getResponseCode();
 
                 if (responseCode == HttpURLConnection.HTTP_OK) {
@@ -140,19 +134,18 @@ public class UserRepository {
                             response.append(inputLine);
                         }
 
-                        // Parse the response as JSON
+
                         Gson gson = new Gson();
                         ErrorResponse<String> jsonResponse = gson.fromJson(response.toString(), new TypeToken<ErrorResponse<String>>() {}.getType());
 
-                        // Check response status and data
                         if ("OK".equals(jsonResponse.getStatus())) {
-                            // Send success message back to the main thread
+
                             Message message = uiHandler.obtainMessage();
                             message.what = 1; // success
                             message.obj = jsonResponse;
                             uiHandler.sendMessage(message);
                         } else {
-                            // Send the error message back to the main thread
+
                             Message message = uiHandler.obtainMessage();
                             message.what = 0; // failure
                             message.obj = jsonResponse.getData();
@@ -160,7 +153,7 @@ public class UserRepository {
                         }
                     }
                 } else {
-                    // Handle the error response
+
                     Message message = uiHandler.obtainMessage();
                     message.what = 0; // failure
                     message.obj = "Logout failed 2: " + responseCode;
@@ -185,31 +178,31 @@ public class UserRepository {
         srv.execute(() -> {
             HttpURLConnection urlConnection = null;
             try {
-                // Create URL
+
                 URL url = new URL("http://10.0.2.2:8080/mangamania/register");
 
-                // Create HttpURLConnection
+
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("POST");
                 urlConnection.setRequestProperty("Content-Type", "application/json; utf-8");
                 urlConnection.setRequestProperty("Accept", "application/json");
                 urlConnection.setDoOutput(true);
 
-                // Create JSON object with user credentials
+
                 JSONObject jsonParam = new JSONObject();
                 jsonParam.put("username", username);
                 jsonParam.put("mail", mail);
                 jsonParam.put("password", password);
 
 
-                // Write JSON to output stream
+
                 try (OutputStream os = urlConnection.getOutputStream();
                      BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"))) {
                     writer.write(jsonParam.toString());
                     writer.flush();
                 }
 
-                // Read response
+
                 int responseCode = urlConnection.getResponseCode();
 
                 if (responseCode == HttpURLConnection.HTTP_OK) {
@@ -220,7 +213,7 @@ public class UserRepository {
                             response.append(inputLine);
                         }
 
-                        // Parse the response as JSON
+
                         Gson gson = new Gson();
                         ErrorResponse<String> jsonResponse;
                         try {
@@ -236,7 +229,7 @@ public class UserRepository {
                             return;
                         }
 
-                        // Check response status and data
+
                         if ("OK".equals(jsonResponse.getStatus())) {
 
                             Message message = uiHandler.obtainMessage();
@@ -244,7 +237,7 @@ public class UserRepository {
                             message.obj = jsonResponse;
                             uiHandler.sendMessage(message);
                         } else {
-                            // Send the error message back to the main thread
+
                             Message message = uiHandler.obtainMessage();
                             message.what = 0; // failure
                             message.obj = jsonResponse.getData();
@@ -253,7 +246,7 @@ public class UserRepository {
                         }
                     }
                 } else {
-                    // Handle the error response
+
                     Message message = uiHandler.obtainMessage();
                     message.what = 0; // failure
                     message.obj = "Signup failed: " + responseCode;
