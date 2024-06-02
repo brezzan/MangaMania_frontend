@@ -115,22 +115,15 @@ public class MangaRepository {
 
                         // new TypeToken<   ....>
                         Gson gson = new Gson();
-                        List<Manga> jsonResponse = gson.fromJson(response.toString(), new TypeToken<List<Manga>>() {}.getType());
+                        Manga jsonResponse = gson.fromJson(response.toString(), new TypeToken<Manga>() {}.getType());
 
-                        // list of manga or []
-                        if (! jsonResponse.isEmpty()) {
+                        // manga object  or {}
 
                             Message message = uiHandler.obtainMessage();
                             message.what = 1; // success
                             message.obj = jsonResponse;
                             uiHandler.sendMessage(message);
-                        } else {
 
-                            Message message = uiHandler.obtainMessage();
-                            message.what = 0; // failure
-                            message.obj = jsonResponse;
-                            uiHandler.sendMessage(message);
-                        }
                     }
                 } else {
 
@@ -159,18 +152,14 @@ public class MangaRepository {
             HttpURLConnection urlConnection = null;
             try {
 
-                URL url = new URL("http://10.0.2.2:8080/mangamania/mangamania/manga/search/en/");
+                String queryParams = "/?titleEn=" + URLEncoder.encode(titleEn, "UTF-8") ;
+                URL url = new URL("http://10.0.2.2:8080/mangamania/mangamania/manga/search/en"+queryParams);
+
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
                 urlConnection.setRequestProperty("Content-Type", "application/json; utf-8");
                 urlConnection.setRequestProperty("Accept", "application/json");
                 urlConnection.setDoOutput(true);
-
-
-                JSONObject jsonParam = new JSONObject();
-                jsonParam.put("titleEn", titleEn);
-
-
 
                 int responseCode = urlConnection.getResponseCode();
 
@@ -188,19 +177,12 @@ public class MangaRepository {
                         List<Manga> jsonResponse = gson.fromJson(response.toString(), new TypeToken<List<Manga>>() {}.getType());
 
                         // list of manga or []
-                        if (! jsonResponse.isEmpty()) {
-                            // Send success message back to the main thread
+
                             Message message = uiHandler.obtainMessage();
                             message.what = 1; // success
                             message.obj = jsonResponse;
                             uiHandler.sendMessage(message);
-                        } else {
-                            // Send the error message back to the main thread
-                            Message message = uiHandler.obtainMessage();
-                            message.what = 0; // failure
-                            message.obj = jsonResponse;
-                            uiHandler.sendMessage(message);
-                        }
+
                     }
                 } else {
 
@@ -227,19 +209,15 @@ public class MangaRepository {
         srv.execute(() -> {
             HttpURLConnection urlConnection = null;
             try {
+                String queryParams = "/?titleOv=" + URLEncoder.encode(titleOv, "UTF-8") ;
+                URL url = new URL("http://10.0.2.2:8080/mangamania/mangamania/manga/search/ov"+queryParams);
 
-                URL url = new URL("http://10.0.2.2:8080/mangamania/mangamania/manga/search/ov/");
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
 
                 urlConnection.setRequestProperty("Content-Type", "application/json; utf-8");
                 urlConnection.setRequestProperty("Accept", "application/json");
                 urlConnection.setDoOutput(true);
-
-
-                JSONObject jsonParam = new JSONObject();
-                jsonParam.put("titleEn", titleOv);
-
 
                 int responseCode = urlConnection.getResponseCode();
 
@@ -257,19 +235,13 @@ public class MangaRepository {
                         List<Manga> jsonResponse = gson.fromJson(response.toString(), new TypeToken<List<Manga>>() {}.getType());
 
                         // list of manga or []
-                        if (! jsonResponse.isEmpty()) {
+
                             // Send success message back to the main thread
                             Message message = uiHandler.obtainMessage();
                             message.what = 1; // success
                             message.obj = jsonResponse;
                             uiHandler.sendMessage(message);
-                        } else {
-                            // Send the error message back to the main thread
-                            Message message = uiHandler.obtainMessage();
-                            message.what = 0; // failure
-                            message.obj = jsonResponse;
-                            uiHandler.sendMessage(message);
-                        }
+
                     }
                 } else {
 

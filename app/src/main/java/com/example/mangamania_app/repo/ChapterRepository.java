@@ -48,28 +48,19 @@ public class ChapterRepository {
 
                         // new TypeToken<   ....>
                         Gson gson = new Gson();
-                        List<Chapter> jsonResponse = gson.fromJson(response.toString(), new TypeToken<List<Chapter>>() {}.getType());
-
-                        // list of manga or []
-                        if (! jsonResponse.isEmpty()) {
+                        Chapter jsonResponse = gson.fromJson(response.toString(), new TypeToken<Chapter>() {}.getType());
 
                             Message message = uiHandler.obtainMessage();
                             message.what = 1; // success
                             message.obj = jsonResponse;
                             uiHandler.sendMessage(message);
-                        } else {
 
-                            Message message = uiHandler.obtainMessage();
-                            message.what = 0; // failure
-                            message.obj = jsonResponse;
-                            uiHandler.sendMessage(message);
-                        }
                     }
                 } else {
 
                     Message message = uiHandler.obtainMessage();
                     message.what = 0; // failure
-                    message.obj = "Could not get chapters" + responseCode;
+                    message.obj = "Could not get the chapter by its id" + responseCode;
                     uiHandler.sendMessage(message);
                 }
             } catch (Exception e) {
@@ -119,20 +110,14 @@ public class ChapterRepository {
                         Gson gson = new Gson();
                         List<Chapter> jsonResponse = gson.fromJson(response.toString(), new TypeToken<List<Chapter>>() {}.getType());
 
-                        // list of manga or []
-                        if (! jsonResponse.isEmpty()) {
+                        // list of chapter  or []
+
 
                             Message message = uiHandler.obtainMessage();
                             message.what = 1; // success
                             message.obj = jsonResponse;
                             uiHandler.sendMessage(message);
-                        } else {
 
-                            Message message = uiHandler.obtainMessage();
-                            message.what = 0; // failure
-                            message.obj = jsonResponse;
-                            uiHandler.sendMessage(message);
-                        }
                     }
                 } else {
 

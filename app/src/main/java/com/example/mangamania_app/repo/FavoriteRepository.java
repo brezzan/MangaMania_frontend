@@ -26,7 +26,7 @@ public class FavoriteRepository {
             HttpURLConnection urlConnection = null;
             try {
 
-                URL url = new URL("http://10.0.2.2:8080/mangamania/manga/favorite");
+                URL url = new URL("http://10.0.2.2:8080/mangamania/favorite");
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestProperty("Content-Type", "application/json; utf-8");
                 urlConnection.setRequestProperty("token", token);

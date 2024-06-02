@@ -26,8 +26,6 @@ import java.util.concurrent.ExecutorService;
 public class CommentsRepository {
 
 
-    ///// getrootcomments ekleee unutmaaaaa
-
     //http://localhost:8080/mangamania/comment/search/chapterid/?id={id}
 
     public void getCommentsForChapter(ExecutorService srv, Handler uiHandler, String chapterId) {
@@ -62,7 +60,8 @@ public class CommentsRepository {
                         Gson gson = new Gson();
                         List<Comment> jsonResponse = gson.fromJson(response.toString(), new TypeToken<List<Comment>>() {}.getType());
 
-                        // list of manga or []
+                        /*
+                        * // list of manga or []
                         if (! jsonResponse.isEmpty()) {
                             // Send success message back to the main thread
                             Message message = uiHandler.obtainMessage();
@@ -76,12 +75,19 @@ public class CommentsRepository {
                             message.obj = jsonResponse;
                             uiHandler.sendMessage(message);
                         }
+                        * */
+                        // list of manga or []
+
+                            Message message = uiHandler.obtainMessage();
+                            message.what = 1; // success
+                            message.obj = jsonResponse;
+                            uiHandler.sendMessage(message);
                     }
                 } else {
 
                     Message message = uiHandler.obtainMessage();
                     message.what = 0; // failure
-                    message.obj = "Could not get mangas" + responseCode;
+                    message.obj = "Could not get comments for that chapter" + responseCode;
                     uiHandler.sendMessage(message);
                 }
             } catch (Exception e) {
@@ -361,6 +367,10 @@ public class CommentsRepository {
     public void alterComment(ExecutorService srv, Handler uiHandler,String token,String commentId, String commentText) {
 
         // {"commentId":"…", "commentText":  "…"}
+        /*
+        * private String commentId;
+	private String commentText;
+	* */
 
         srv.execute(() -> {
             HttpURLConnection urlConnection = null;
@@ -450,7 +460,6 @@ public class CommentsRepository {
 
     public void deleteComment(ExecutorService srv, Handler uiHandler,String token,String commentId) {
 
-        // {"commentId":"…", "commentText":  "…"}
 
         srv.execute(() -> {
             HttpURLConnection urlConnection = null;
@@ -530,5 +539,79 @@ public class CommentsRepository {
 
 
     }
+
+
+
+    public void getRootCommentsOfChapter(ExecutorService srv, Handler uiHandler,String commentId) {
+
+
+        srv.execute(() -> {
+            HttpURLConnection urlConnection = null;
+            try {
+                String queryParams = "?id=" + URLEncoder.encode(commentId, "UTF-8") ;
+
+                URL url = new URL("http://10.0.2.2:8080/mangamania/rootcomment/chapterid/"+queryParams);
+
+                urlConnection = (HttpURLConnection) url.openConnection();
+
+                urlConnection.setRequestProperty("Content-Type", "application/json; utf-8");
+                urlConnection.setRequestProperty("Accept", "application/json");
+                urlConnection.setDoOutput(true);
+
+
+                int responseCode = urlConnection.getResponseCode();
+
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    try (BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()))) {
+                        StringBuilder response = new StringBuilder();
+                        String inputLine;
+                        while ((inputLine = in.readLine()) != null) {
+                            response.append(inputLine);
+                        }
+
+
+                        Gson gson = new Gson();
+                        List<Comment> jsonResponse;
+                        try {
+                            jsonResponse = gson.fromJson(response.toString(), new TypeToken<List<Comment>>() {}.getType());
+                        } catch (JsonSyntaxException e) {
+
+                            Message message = uiHandler.obtainMessage();
+                            message.what = 0; // failure
+                            message.obj = "JSON Parsing error: " + e.getMessage();
+
+                            uiHandler.sendMessage(message);
+                            return;
+                        }
+
+
+                            Message message = uiHandler.obtainMessage();
+                            message.what = 1; // success
+                            message.obj = jsonResponse;
+                            uiHandler.sendMessage(message);
+                    }
+                } else {
+                    Message message = uiHandler.obtainMessage();
+                    message.what = 0; // failure
+                    message.obj = "root comments could not be gotten " + responseCode;
+
+                    uiHandler.sendMessage(message);
+                }
+            } catch (Exception e) {
+                Message message = uiHandler.obtainMessage();
+                message.what = 0; // failure
+                message.obj = "Exception: " + e.getMessage();
+                uiHandler.sendMessage(message);
+            } finally {
+                if (urlConnection != null) {
+                    urlConnection.disconnect();
+                }
+            }
+        });
+
+
+
+    }
+
 }
 
