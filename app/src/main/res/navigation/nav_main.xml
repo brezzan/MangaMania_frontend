@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_nav"
+    app:startDestination="@id/loginPage">
+    <fragment
+        android:id="@+id/loginPage"
+        android:name="com.example.mangamania_app.LoginPage"
+        android:label="Login"
+        tools:layout="@layout/fragment_login_page" >
+        <action
+            android:id="@+id/action_loginPage_to_mainPage"
+            app:destination="@id/mainPage" />
+        <action
+            android:id="@+id/action_loginPage_to_signUpPage"
+            app:destination="@id/signUpPage" />
+    </fragment>
+    <fragment
+        android:id="@+id/mainPage"
+        android:name="com.example.mangamania_app.MainPage"
+        android:label="MangaMania"
+        tools:layout="@layout/fragment_main_page" >
+        <action
+            android:id="@+id/action_mainPage_to_mangaPage"
+            app:destination="@id/mangaPage" />
+        <action
+            android:id="@+id/action_mainPage_to_profilePage"
+            app:destination="@id/profilePage" />
+    </fragment>
+    <fragment
+        android:id="@+id/mangaPage"
+        android:name="com.example.mangamania_app.MangaPage"
+        android:label="fragment_manga_page"
+        tools:layout="@layout/fragment_manga_page" >
+        <action
+            android:id="@+id/action_mangaPage_to_commentsPage"
+            app:destination="@id/commentsPage" />
+    </fragment>
+    <fragment
+        android:id="@+id/commentsPage"
+        android:name="com.example.mangamania_app.CommentsPage"
+        android:label="fragment_comments_page"
+        tools:layout="@layout/fragment_comments_page" >
+        <action
+            android:id="@+id/action_commentsPage_to_postCommentPage"
+            app:destination="@id/postCommentPage" />
+        <action
+            android:id="@+id/action_commentsPage_to_mangaPage"
+            app:destination="@id/mangaPage" />
+    </fragment>
+    <fragment
+        android:id="@+id/signUpPage"
+        android:name="com.example.mangamania_app.SignUpPage"
+        android:label="Sign Up"
+        tools:layout="@layout/fragment_sign_up_page" >
+        <action
+            android:id="@+id/action_signUpPage_to_mainPage"
+            app:destination="@id/mainPage" />
+        <action
+            android:id="@+id/action_signUpPage_to_loginPage2"
+            app:destination="@id/loginPage" />
+    </fragment>
+    <fragment
+        android:id="@+id/profilePage"
+        android:name="com.example.mangamania_app.ProfilePage"
+        android:label="Profile"
+        tools:layout="@layout/fragment_profile_page" >
+        <action
+            android:id="@+id/action_profilePage_to_loginPage"
+            app:destination="@id/loginPage" />
+    </fragment>
+    <fragment
+        android:id="@+id/postCommentPage"
+        android:name="com.example.mangamania_app.PostCommentPage"
+        android:label="fragment_post_comment_page"
+        tools:layout="@layout/fragment_post_comment_page" >
+        <action
+            android:id="@+id/action_postCommentPage_to_commentsPage"
+            app:destination="@id/commentsPage" />
+    </fragment>
+</navigation>
