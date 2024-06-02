@@ -7,6 +7,7 @@ import android.util.Log;
 import com.example.mangamania_app.model.ErrorResponse;
 import com.example.mangamania_app.model.Token;
 import com.example.mangamania_app.model.Manga;
+import com.example.mangamania_app.model.Favorite;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;

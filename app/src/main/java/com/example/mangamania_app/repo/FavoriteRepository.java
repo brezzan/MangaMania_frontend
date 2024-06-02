@@ -4,6 +4,7 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.example.mangamania_app.model.ErrorResponse;
+import com.example.mangamania_app.model.Favorite;
 import com.example.mangamania_app.model.Manga;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -18,7 +19,6 @@ import java.util.concurrent.ExecutorService;
 
 public class FavoriteRepository {
 
-    // get favorite farklı tipte cevap veriyorrrr  düzelttt
 
     public void getFavoriteManga(ExecutorService srv, Handler uiHandler, String token) {
 
@@ -48,11 +48,21 @@ public class FavoriteRepository {
                         // new TypeToken<   ....>
                         Gson gson = new Gson();
                         // BURASI FARKLI TYPE - DEGİSTİRRR------------------------------------------------------------------------------------------
-                        List<Manga> jsonResponse = gson.fromJson(response.toString(), new TypeToken<List<Manga>>() {}.getType());
+                        //List<Manga> jsonResponse = gson.fromJson(response.toString(), new TypeToken<List<Manga>>() {}.getType());
 
-                        // list of manga or []
-                        if (! jsonResponse.isEmpty()) {
-                            // Send success message back to the main thread
+                        Favorite jsonResponse = gson.fromJson(response.toString(), new TypeToken<Favorite>() {}.getType());
+
+
+                        // returns Favorite type response      {     ...  favoriteMangas:[...]  }
+
+                        Message message = uiHandler.obtainMessage();
+                        message.what = 1;
+                        message.obj = jsonResponse.getFavoriteMangas();   // return mangaList part
+                        uiHandler.sendMessage(message);
+
+                             /*
+                        if (! jsonResponse.getFavoriteMangas().isEmpty()) {
+
                             Message message = uiHandler.obtainMessage();
                             message.what = 1; // success
                             message.obj = jsonResponse;
@@ -63,18 +73,19 @@ public class FavoriteRepository {
                             message.what = 0; // failure
                             message.obj = jsonResponse;
                             uiHandler.sendMessage(message);
-                        }
+                        }*/
+
                     }
                 } else {
 
                     Message message = uiHandler.obtainMessage();
-                    message.what = 0; // failure
+                    message.what = 0;
                     message.obj = "Could not get mangas" + responseCode;
                     uiHandler.sendMessage(message);
                 }
             } catch (Exception e) {
                 Message message = uiHandler.obtainMessage();
-                message.what = 0; // failure
+                message.what = 0;
                 message.obj = "Exception 1: " + e.getMessage();
                 uiHandler.sendMessage(message);
             } finally {
