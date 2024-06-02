@@ -1,23 +1,17 @@
 package com.example.mangamania_app.repo;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 
-import com.example.mangamania_app.model.ErrorResponse;
-import com.example.mangamania_app.model.Token;
-import com.example.mangamania_app.model.Manga;
 import com.example.mangamania_app.model.Chapter;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
+
 import com.google.gson.reflect.TypeToken;
 
-import org.json.JSONObject;
+
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
+
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
