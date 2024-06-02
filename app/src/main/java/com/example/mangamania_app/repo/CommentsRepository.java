@@ -25,6 +25,9 @@ import java.util.concurrent.ExecutorService;
 
 public class CommentsRepository {
 
+
+    ///// getrootcomments ekleee unutmaaaaa
+
     //http://localhost:8080/mangamania/comment/search/chapterid/?id={id}
 
     public void getCommentsForChapter(ExecutorService srv, Handler uiHandler, String chapterId) {

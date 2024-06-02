@@ -21,7 +21,7 @@ import java.util.concurrent.ExecutorService;
 
 public class ChapterRepository {
 
-    // chapter adapter ile selected chapter tutabilirsek bunu yazmaya gerek yok
+    // chapter adapter ile selected chapter
 
     public void getChapterById(ExecutorService srv, Handler uiHandler,String id) {
 

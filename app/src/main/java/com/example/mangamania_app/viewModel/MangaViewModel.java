@@ -11,11 +11,18 @@ public class MangaViewModel extends ViewModel {
 
     private MutableLiveData<List<Manga>> mangaList = new MutableLiveData<>();
     private MutableLiveData<Manga> selectedManga = new MutableLiveData<>();
+
+    private MutableLiveData<List<Manga>> favoriteMangaList = new MutableLiveData<>();
+    private MutableLiveData<Manga> selectedFavoriteManga = new MutableLiveData<>();  // selectedManga yeter mi ?
+
+
     public MutableLiveData<List<Manga>> getMangaList() {
+
         return mangaList;
     }
 
     public void setMangaList(List<Manga> mangas) {
+
         this.mangaList.setValue(mangas);
     }
 
@@ -28,4 +35,19 @@ public class MangaViewModel extends ViewModel {
         selectedManga.setValue(manga);
     }
 
+    public MutableLiveData<List<Manga>> getFavoriteMangaList() {
+        return favoriteMangaList;
+    }
+
+    public void setFavoriteMangaList(List<Manga> favoriteMangaList) {
+        this.favoriteMangaList.setValue(favoriteMangaList);
+    }
+
+    public MutableLiveData<Manga> getSelectedFavoriteManga() {
+        return selectedFavoriteManga;
+    }
+
+    public void setSelectedFavoriteManga(Manga selectedFavoriteManga) {
+        this.selectedFavoriteManga.setValue(selectedFavoriteManga);
+    }
 }
