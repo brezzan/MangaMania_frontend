@@ -57,7 +57,7 @@ public class MangaAdapter extends RecyclerView.Adapter<MangaAdapter.MangaViewHol
 
         Manga manga = mangaList.get(position);
 
-       // holder.row.setText(person.getName() +  " " + person.getLastname());
+        // holder.row.setText(person.getName() +  " " + person.getLastname());
         //holder.txtNumber.setText(person.getWorkPhone());
 
         //continue with interactions
@@ -104,7 +104,7 @@ public class MangaAdapter extends RecyclerView.Adapter<MangaAdapter.MangaViewHol
             row = (ConstraintLayout) itemView;
             txtManga = itemView.findViewById(R.id.txtMangaName);
             txtAuthor = itemView.findViewById(R.id.txtAuthorName);
-            img = itemView.findViewById(R.id.imageMangaView);
+            // img = itemView.findViewById(R.id.);
 
 
 

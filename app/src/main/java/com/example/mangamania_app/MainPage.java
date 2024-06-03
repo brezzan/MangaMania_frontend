@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -39,6 +40,68 @@ public class MainPage extends Fragment {
     private LoginViewModel loginViewModel;
     private MangaViewModel mangaViewModel;
     private ExecutorService srv;
+
+
+    private Handler mangahandler = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(@NonNull Message msg) {
+            if (msg.what == 1) {
+                List<Manga> response = (List<Manga>) msg.obj;
+                mangaViewModel.setMangaList(response);
+                List<Manga> res = mangaViewModel.getMangaList().getValue();
+
+                Toast.makeText(getActivity(), "manga count "+ mangaViewModel.getMangaList().getValue().size(), Toast.LENGTH_SHORT).show();
+                if (res == null || res.isEmpty()) {
+                    Toast.makeText(getActivity(), "No mangas found", Toast.LENGTH_SHORT).show();
+                }
+                return true;
+            } else {
+                Toast.makeText(getActivity(), "Could not get mangas: " + msg.obj, Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        }
+    });
+
+    @Override
+
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            binding = FragmentMainPageBinding.inflate(inflater, container, false);
+            binding.mangaRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
+
+            // Check if mangaViewModel is null
+            if (mangaViewModel == null) {
+                Toast.makeText(getActivity(), "No mangas found", Toast.LENGTH_SHORT).show();
+                mangaViewModel = new ViewModelProvider(this).get(MangaViewModel.class);
+            }
+
+            // Observe the mangaList LiveData
+            mangaViewModel = new ViewModelProvider(this).get(MangaViewModel.class);
+/*
+            mangaViewModel.getMangaList().observe(getViewLifecycleOwner(), mangas -> {
+                if (mangas != null) {
+                    MangaAdapter adapter = new MangaAdapter(getContext());
+                    binding.mangaRecycler.setAdapter(adapter);
+                }
+            });
+*/
+
+
+        WebApp app = (WebApp) requireActivity().getApplication();
+        srv = app.srv;
+
+        MangaRepository mangaRepo = new MangaRepository();
+        mangaRepo.getManga(srv, mangahandler);
+/*
+        binding.btnLogout.setOnClickListener(view -> {
+            String tokenString = loginViewModel.getLoginToken().getValue().getData().getToken();
+            UserRepository repo = new UserRepository();
+            repo.logout(srv, logoutHandler, tokenString);
+        });
+*/
+        return binding.getRoot();
+    }
+
+
     private Handler logoutHandler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(@NonNull Message msg) {
@@ -52,68 +115,4 @@ public class MainPage extends Fragment {
             return true;
         }
     });
-
-    private Handler mangahandler = new Handler(new Handler.Callback() {
-        @Override
-        public boolean handleMessage(@NonNull Message msg) {
-            if (msg.what == 1) {
-                List<Manga> response= (List<Manga>) msg.obj;
-                if ( !response.isEmpty()) {
-
-                    mangaViewModel.setMangaList(response);
-                    Toast.makeText(getActivity(), "manga count = " + mangaViewModel.getMangaList().getValue().size(), Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getActivity(), "MANGAS COULD NOT UPLOAD: " , Toast.LENGTH_SHORT).show();
-                }
-            } else {
-                Toast.makeText(getActivity(),  "Could not get mangas: " + msg.obj, Toast.LENGTH_SHORT).show();
-            }
-            return true;
-        }
-    });
-
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = FragmentMainPageBinding.inflate(inflater, container, false);
-        loginViewModel = new ViewModelProvider(requireActivity()).get(LoginViewModel.class);
-        mangaViewModel = new ViewModelProvider(requireActivity()).get(MangaViewModel.class);
-
-        WebApp app = (WebApp) requireActivity().getApplication();
-        srv = app.srv;
-
-        MangaRepository mangaRepo = new MangaRepository();
-        mangaRepo.getManga(srv,mangahandler);
-
-/*
-// manga list of manga_row
-        MangaAdapter adp = new MangaAdapter(this.getContext());
-
-        binding.mangaRecycler.setAdapter(adp);
-
-
-        binding.mangaRecycler.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
-
-        mangaViewModel.getSelectedManga().observe(this.getActivity(),manga->{
-
-            NavController navController = Navigation.findNavController(requireActivity(), R.id.fragmentContainerView);
-            navController.navigate(R.id.action_mainPage_to_mangaPage);
-
-        });
-*/
-
-
-        binding.btnLogout.setOnClickListener(view -> {
-
-            String tokenString  = loginViewModel.getLoginToken().getValue().getData().getToken();
-
-            Log.i("token",tokenString);
-            UserRepository repo = new UserRepository();
-            repo.logout(srv, logoutHandler, tokenString);
-        });
-
-
-
-
-        return binding.getRoot();
-    }
 }

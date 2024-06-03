@@ -1,9 +1,13 @@
 package com.example.mangamania_app.model;
 
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.Serializable;
 import java.util.List;
 
-public class Manga {
+public class Manga implements Serializable {
 
 
     private String mangaId;
@@ -15,14 +19,25 @@ public class Manga {
     private Information information;
     private Statistics statistics;
     private List<Character> characters;
-
     private String picture_url;
 
+    public Manga(String mangaId,String titleOv, String titleEn, String synopsis, AlternativeTitles alternativeTitles,
+                 Information information, Statistics statistics, List<Character> characters, String pictureUrl) {
+        super();
+        this.mangaId = mangaId;
+        this.title_ov = titleOv;
+        this.title_en = titleEn;
+        this.synopsis = synopsis;
+        this.alternative_titles = alternativeTitles;
+        this.information = information;
+        this.statistics = statistics;
+        this.characters = characters;
+        this.picture_url = pictureUrl;
+    }
 
 
-
-    public Manga( String titleOv, String titleEn, String synopsis, AlternativeTitles alternativeTitles,
-                  Information information, Statistics statistics, List<Character> characters, String pictureUrl) {
+    public Manga(String titleOv, String titleEn, String synopsis, AlternativeTitles alternativeTitles,
+                 Information information, Statistics statistics, List<Character> characters, String pictureUrl) {
         super();
 
         this.title_ov = titleOv;
@@ -128,6 +143,13 @@ public class Manga {
             this.english = english;
         }
 
+        @Override
+        public String toString() {
+            return "AlternativeTitles{" +
+                    "japanese='" + japanese + '\'' +
+                    ", english='" + english + '\'' +
+                    '}';
+        }
     }
 
     public static class Information {
@@ -225,6 +247,22 @@ public class Manga {
             this.authors = authors;
         }
 
+
+        @Override
+        public String toString() {
+            return "Information{" +
+                    "types=" + types +
+                    ", volumes='" + volumes + '\'' +
+                    ", chapters='" + chapters + '\'' +
+                    ", status='" + status + '\'' +
+                    ", published='" + published + '\'' +
+                    ", genres=" + genres +
+                    ", themes=" + themes +
+                    ", demographics=" + demographics +
+                    ", serializations=" + serializations +
+                    ", authors=" + authors +
+                    '}';
+        }
     }
 
     public static class Type {
@@ -297,6 +335,17 @@ public class Manga {
         public void setFavorites(String favorites) {
             this.favorites = favorites;
         }
+
+        @Override
+        public String toString() {
+            return "Statistics{" +
+                    "score='" + score + '\'' +
+                    ", ranked='" + ranked + '\'' +
+                    ", popularity='" + popularity + '\'' +
+                    ", members='" + members + '\'' +
+                    ", favorites='" + favorites + '\'' +
+                    '}';
+        }
     }
 
     public static class Character {
@@ -328,11 +377,32 @@ public class Manga {
         public void setMyanimelistUrl(String myanimelistUrl) {
             this.myanimelistUrl = myanimelistUrl;
         }
+
+        @Override
+        public String toString() {
+            return "Character{" +
+                    "name='" + name + '\'' +
+                    ", pictureUrl='" + pictureUrl + '\'' +
+                    ", myanimelistUrl='" + myanimelistUrl + '\'' +
+                    '}';
+        }
     }
 
 
-
-
+    @Override
+    public String toString() {
+        return "Manga{" +
+                "mangaId='" + mangaId + '\'' +
+                ", title_ov='" + title_ov + '\'' +
+                ", title_en='" + title_en + '\'' +
+                ", synopsis='" + synopsis + '\'' +
+                ", alternative_titles=" + alternative_titles +
+                ", information=" + information +
+                ", statistics=" + statistics +
+                ", characters=" + characters +
+                ", picture_url='" + picture_url + '\'' +
+                '}';
+    }
 
 }
 
