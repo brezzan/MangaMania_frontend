@@ -21,94 +21,74 @@ import java.util.List;
 
 public class MangaAdapter extends RecyclerView.Adapter<MangaAdapter.MangaViewHolder> {
 
-
-
     Context context;
     List<Manga> mangaList;
+    MangaViewModel mangaViewModel;
 
     MangaClickListener listener;
 
-    MangaViewModel viewModel;
-
-    interface  MangaClickListener{
-        public void mangaClicked(Manga manga);
+    interface  MangaClickListener {
+        void mangaClicked(Manga manga);
     }
 
-    public MangaAdapter(Context context) {
+    public MangaAdapter(Context context,MangaViewModel mangaViewModel) {
         this.context = context;
-
-        viewModel = new ViewModelProvider((AppCompatActivity)context).get(MangaViewModel.class);
-
-        this.mangaList = viewModel.getMangaList().getValue();
+        this.mangaViewModel = new ViewModelProvider((AppCompatActivity)context).get(MangaViewModel.class);
+        mangaList = mangaViewModel.getMangaList().getValue();
     }
-
 
     @Override
     public MangaViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View root=  LayoutInflater.from(context).inflate(R.layout.manga_row, parent, false);
 
-        View root=  LayoutInflater.from(context).inflate(R.layout.manga_row,parent,false);
-        MangaViewHolder holder = new MangaViewHolder(root);
-
-        return holder;
+        return new MangaViewHolder(root);
     }
 
-
+    @Override
     public void onBindViewHolder(@NonNull MangaViewHolder holder, int position) {
-
+        if (mangaList == null) {
+            mangaList = mangaViewModel.getMangaList().getValue();
+        }
         Manga manga = mangaList.get(position);
+        holder.txtManga.setText(manga.getTitleEn().toString());
+        holder.txtAuthor.setText(manga.getInformation().getAuthors().get(0).getName().toString());
 
-        // holder.row.setText(person.getName() +  " " + person.getLastname());
-        //holder.txtNumber.setText(person.getWorkPhone());
-
-        //continue with interactions
-
-        holder.row.setOnClickListener(v->{
-            /*
-            Toast.makeText(context, person.getName() +  " " + person.getLastname(),
-                    Toast.LENGTH_SHORT).show();
-
-                    */
-
-            if(listener!=null){
+        holder.row.setOnClickListener(v -> {
+            if (listener != null) {
                 listener.mangaClicked(manga);
             }
-
-            viewModel.setSelectedManga(manga);
-
-
+            mangaViewModel.setSelectedManga(manga);
         });
 
-
+        // Bind manga data to ViewHolder views here
     }
 
     @Override
     public int getItemCount() {
-        return viewModel.getMangaList().getValue().size();
+        if (mangaList == null) {
+            return 0;
+        }
+        return mangaList.size();
     }
 
     public void setListener(MangaClickListener listener) {
         this.listener = listener;
     }
 
-
-    class MangaViewHolder extends RecyclerView.ViewHolder{
+    class MangaViewHolder extends RecyclerView.ViewHolder {
 
         TextView txtManga;
         TextView txtAuthor;
         ImageView img;
         ConstraintLayout row;
 
-
         public MangaViewHolder(@NonNull View itemView) {
             super(itemView);
             row = (ConstraintLayout) itemView;
-            txtManga = itemView.findViewById(R.id.txtMangaName);
-            txtAuthor = itemView.findViewById(R.id.txtAuthorName);
+            txtManga = itemView.findViewById(R.id.txtDate);
+            txtAuthor = itemView.findViewById(R.id.txtName3);
+
             // img = itemView.findViewById(R.id.);
-
-
-
         }
     }
-
 }

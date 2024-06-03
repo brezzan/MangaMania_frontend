@@ -1,5 +1,7 @@
 package com.example.mangamania_app.viewModel;
 
+import android.util.Log;
+
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -24,6 +26,7 @@ public class MangaViewModel extends ViewModel {
     public void setMangaList(List<Manga> mangas) {
 
         this.mangaList.setValue(mangas);
+        Log.i("okay "," "+this.getMangaList().getValue().size());
     }
 
     public MutableLiveData<Manga> getSelectedManga() {

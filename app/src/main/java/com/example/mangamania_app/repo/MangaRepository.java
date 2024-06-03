@@ -32,111 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 public class MangaRepository {
-/*
-    // http://localhost:8080/mangamania/manga
-    public void getManga(ExecutorService srv, Handler uiHandler) {
 
-        srv.execute(() -> {
-            HttpURLConnection urlConnection = null;
-            try {
-
-                URL url = new URL("http://10.0.2.2:8080/mangamania/manga");
-                urlConnection = (HttpURLConnection) url.openConnection();
-                urlConnection.setRequestMethod("GET");
-                urlConnection.setRequestProperty("Accept", "application/json");
-
-                // Read response
-                int responseCode = urlConnection.getResponseCode();
-
-                if (responseCode == HttpURLConnection.HTTP_OK) {
-                    try (BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()))) {
-                        StringBuilder response = new StringBuilder();
-                        String inputLine;
-                        while ((inputLine = in.readLine()) != null) {
-                            response.append(inputLine);
-                        }
-
-                        // new TypeToken<   ....>
-                        Gson gson = new Gson();
-                        List<Manga> jsonResponse = gson.fromJson(response.toString(), new TypeToken<List<Manga>>() {}.getType());
-
-                        // list of manga or []
-                        if (! jsonResponse.isEmpty()) {
-                            // Send success message back to the main thread
-                            Message message = uiHandler.obtainMessage();
-                            message.what = 1; // success
-                            message.obj = jsonResponse;
-                            uiHandler.sendMessage(message);
-                        } else {
-                            // Send the error message back to the main thread
-                            Message message = uiHandler.obtainMessage();
-                            message.what = 0; // failure
-                            message.obj = jsonResponse;
-                            uiHandler.sendMessage(message);
-                        }
-                    }
-                } else {
-                    // Handle the error response
-                    Message message = uiHandler.obtainMessage();
-                    message.what = 0; // failure
-                    message.obj = "Could not get mangas" + responseCode;
-                    uiHandler.sendMessage(message);
-                }
-            } catch (Exception e) {
-                Message message = uiHandler.obtainMessage();
-                message.what = 0; // failure
-                message.obj = "Exception 1: " + e.getMessage();
-                uiHandler.sendMessage(message);
-            } finally {
-                if (urlConnection != null) {
-                    urlConnection.disconnect();
-                }
-            }
-        });
-    }
-
-    public void getManga(ExecutorService srv, Handler uiHandler) {
-        srv.execute(() -> {
-            HttpURLConnection urlConnection = null;
-            try {
-                URL url = new URL("http://10.0.2.2:8080/mangamania/manga");
-                urlConnection = (HttpURLConnection) url.openConnection();
-                urlConnection.setRequestMethod("GET");
-                urlConnection.setRequestProperty("Accept", "application/json");
-
-                int responseCode = urlConnection.getResponseCode();
-
-                if (responseCode == HttpURLConnection.HTTP_OK) {
-                    try (BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()))) {
-                        StringBuilder response = new StringBuilder();
-                        String inputLine;
-                        while ((inputLine = in.readLine()) != null) {
-                            response.append(inputLine);
-                        }
-
-                        Gson gson = new Gson();
-                        List<Manga> jsonResponse = gson.fromJson(response.toString(), new TypeToken<List<Manga>>() {}.getType());
-
-                        Log.d("MangaRepository", "Manga List: " + jsonResponse); // Log the response
-
-                        Message message = uiHandler.obtainMessage();
-                        message.what = 1; // success
-                        message.obj = jsonResponse;
-                        uiHandler.sendMessage(message);
-                    }
-                } else {
-                    handleFailure(uiHandler, "Could not get mangas, response code: " + responseCode);
-                }
-            } catch (Exception e) {
-                handleFailure(uiHandler, "Exception: " + e.getMessage());
-            } finally {
-                if (urlConnection != null) {
-                    urlConnection.disconnect();
-                }
-            }
-        });
-    }
-    */
     public void getManga(ExecutorService srv, Handler uiHandler) {
         srv.execute(()->{
 
@@ -435,3 +331,111 @@ public class MangaRepository {
 
 
 }
+
+
+
+/*
+    // http://localhost:8080/mangamania/manga
+    public void getManga(ExecutorService srv, Handler uiHandler) {
+
+        srv.execute(() -> {
+            HttpURLConnection urlConnection = null;
+            try {
+
+                URL url = new URL("http://10.0.2.2:8080/mangamania/manga");
+                urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setRequestMethod("GET");
+                urlConnection.setRequestProperty("Accept", "application/json");
+
+                // Read response
+                int responseCode = urlConnection.getResponseCode();
+
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    try (BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()))) {
+                        StringBuilder response = new StringBuilder();
+                        String inputLine;
+                        while ((inputLine = in.readLine()) != null) {
+                            response.append(inputLine);
+                        }
+
+                        // new TypeToken<   ....>
+                        Gson gson = new Gson();
+                        List<Manga> jsonResponse = gson.fromJson(response.toString(), new TypeToken<List<Manga>>() {}.getType());
+
+                        // list of manga or []
+                        if (! jsonResponse.isEmpty()) {
+                            // Send success message back to the main thread
+                            Message message = uiHandler.obtainMessage();
+                            message.what = 1; // success
+                            message.obj = jsonResponse;
+                            uiHandler.sendMessage(message);
+                        } else {
+                            // Send the error message back to the main thread
+                            Message message = uiHandler.obtainMessage();
+                            message.what = 0; // failure
+                            message.obj = jsonResponse;
+                            uiHandler.sendMessage(message);
+                        }
+                    }
+                } else {
+                    // Handle the error response
+                    Message message = uiHandler.obtainMessage();
+                    message.what = 0; // failure
+                    message.obj = "Could not get mangas" + responseCode;
+                    uiHandler.sendMessage(message);
+                }
+            } catch (Exception e) {
+                Message message = uiHandler.obtainMessage();
+                message.what = 0; // failure
+                message.obj = "Exception 1: " + e.getMessage();
+                uiHandler.sendMessage(message);
+            } finally {
+                if (urlConnection != null) {
+                    urlConnection.disconnect();
+                }
+            }
+        });
+    }
+
+    public void getManga(ExecutorService srv, Handler uiHandler) {
+        srv.execute(() -> {
+            HttpURLConnection urlConnection = null;
+            try {
+                URL url = new URL("http://10.0.2.2:8080/mangamania/manga");
+                urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setRequestMethod("GET");
+                urlConnection.setRequestProperty("Accept", "application/json");
+
+                int responseCode = urlConnection.getResponseCode();
+
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    try (BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()))) {
+                        StringBuilder response = new StringBuilder();
+                        String inputLine;
+                        while ((inputLine = in.readLine()) != null) {
+                            response.append(inputLine);
+                        }
+
+                        Gson gson = new Gson();
+                        List<Manga> jsonResponse = gson.fromJson(response.toString(), new TypeToken<List<Manga>>() {}.getType());
+
+                        Log.d("MangaRepository", "Manga List: " + jsonResponse); // Log the response
+
+                        Message message = uiHandler.obtainMessage();
+                        message.what = 1; // success
+                        message.obj = jsonResponse;
+                        uiHandler.sendMessage(message);
+                    }
+                } else {
+                    handleFailure(uiHandler, "Could not get mangas, response code: " + responseCode);
+                }
+            } catch (Exception e) {
+                handleFailure(uiHandler, "Exception: " + e.getMessage());
+            } finally {
+                if (urlConnection != null) {
+                    urlConnection.disconnect();
+                }
+            }
+        });
+    }
+    */

@@ -41,67 +41,6 @@ public class MainPage extends Fragment {
     private MangaViewModel mangaViewModel;
     private ExecutorService srv;
 
-
-    private Handler mangahandler = new Handler(new Handler.Callback() {
-        @Override
-        public boolean handleMessage(@NonNull Message msg) {
-            if (msg.what == 1) {
-                List<Manga> response = (List<Manga>) msg.obj;
-                mangaViewModel.setMangaList(response);
-                List<Manga> res = mangaViewModel.getMangaList().getValue();
-
-                Toast.makeText(getActivity(), "manga count "+ mangaViewModel.getMangaList().getValue().size(), Toast.LENGTH_SHORT).show();
-                if (res == null || res.isEmpty()) {
-                    Toast.makeText(getActivity(), "No mangas found", Toast.LENGTH_SHORT).show();
-                }
-                return true;
-            } else {
-                Toast.makeText(getActivity(), "Could not get mangas: " + msg.obj, Toast.LENGTH_SHORT).show();
-                return true;
-            }
-        }
-    });
-
-    @Override
-
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            binding = FragmentMainPageBinding.inflate(inflater, container, false);
-            binding.mangaRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
-
-            // Check if mangaViewModel is null
-            if (mangaViewModel == null) {
-                Toast.makeText(getActivity(), "No mangas found", Toast.LENGTH_SHORT).show();
-                mangaViewModel = new ViewModelProvider(this).get(MangaViewModel.class);
-            }
-
-            // Observe the mangaList LiveData
-            mangaViewModel = new ViewModelProvider(this).get(MangaViewModel.class);
-/*
-            mangaViewModel.getMangaList().observe(getViewLifecycleOwner(), mangas -> {
-                if (mangas != null) {
-                    MangaAdapter adapter = new MangaAdapter(getContext());
-                    binding.mangaRecycler.setAdapter(adapter);
-                }
-            });
-*/
-
-
-        WebApp app = (WebApp) requireActivity().getApplication();
-        srv = app.srv;
-
-        MangaRepository mangaRepo = new MangaRepository();
-        mangaRepo.getManga(srv, mangahandler);
-/*
-        binding.btnLogout.setOnClickListener(view -> {
-            String tokenString = loginViewModel.getLoginToken().getValue().getData().getToken();
-            UserRepository repo = new UserRepository();
-            repo.logout(srv, logoutHandler, tokenString);
-        });
-*/
-        return binding.getRoot();
-    }
-
-
     private Handler logoutHandler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(@NonNull Message msg) {
@@ -115,4 +54,65 @@ public class MainPage extends Fragment {
             return true;
         }
     });
+
+
+    private Handler mangahandler = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(@NonNull Message msg) {
+            if (msg.what == 1) {
+                List<Manga> response = (List<Manga>) msg.obj;
+                mangaViewModel.setMangaList(response);
+
+                List<Manga> res = mangaViewModel.getMangaList().getValue();
+                if (res == null || res.isEmpty() ) {
+                    Toast.makeText(getActivity(), "From handle message : No mangas found", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    Toast.makeText(getActivity(), "From handle message : "+ res.size(), Toast.LENGTH_SHORT).show();
+                }
+
+                return true;
+            } else {
+                Toast.makeText(getActivity(), "Could not get mangas: " + msg.obj, Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        }
+    });
+
+    @Override
+
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        WebApp app = (WebApp) requireActivity().getApplication();
+        srv = app.srv;
+        mangaViewModel = new ViewModelProvider(this).get(MangaViewModel.class);
+        MangaRepository mangaRepo = new MangaRepository();
+        mangaRepo.getManga(srv, mangahandler);
+
+        binding = FragmentMainPageBinding.inflate(inflater, container, false);
+
+
+        binding.btnLogout.setOnClickListener(view -> {
+                String tokenString = loginViewModel.getLoginToken().getValue().getData().getToken();
+                UserRepository repo = new UserRepository();
+                repo.logout(srv, logoutHandler, tokenString);
+        });
+
+        mangaViewModel.getMangaList().observe(getViewLifecycleOwner(), mangas -> {
+            if (mangas == null || mangas.isEmpty()) {
+                binding.mainAppPageText.setText("0");
+            } else {
+
+                MangaAdapter adp = new MangaAdapter(this.getContext(),mangaViewModel);
+
+                binding.mangaRecycler.setAdapter(adp);
+                binding.mangaRecycler.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+
+            }
+        });
+
+        return binding.getRoot();
+    }
+
 }
+
