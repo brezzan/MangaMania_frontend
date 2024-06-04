@@ -91,6 +91,7 @@ public class MainPage extends Fragment {
 
         MangaRepository mangaRepo = new MangaRepository();
         mangaRepo.getManga(srv, mangahandler);
+
         NavController navController = Navigation.findNavController(requireActivity(), R.id.fragmentContainerView);
 
         binding = FragmentMainPageBinding.inflate(inflater, container, false);
@@ -100,6 +101,14 @@ public class MainPage extends Fragment {
                 String tokenString = loginViewModel.getLoginToken().getValue().getData().getToken();
                 UserRepository repo = new UserRepository();
                 repo.logout(srv, logoutHandler, tokenString);
+                //navController.navigate(R.id.action_mainPage_to_mangaPage);
+        });
+
+
+        // mainpage den profile gidiyor.
+        binding.btnProfilePage.setOnClickListener(view -> {
+
+            navController.navigate(R.id.action_mainPage_to_profilePage);
         });
 
         mangaViewModel.getMangaList().observe(getViewLifecycleOwner(), mangas -> {

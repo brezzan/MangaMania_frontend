@@ -89,6 +89,10 @@ public class MangaPage extends Fragment {
             binding.commentPageText.setText("selected manga null");
         }
 
+        binding.txtMangaTitle.setText(selectedManga.getTitleEn().toString());
+        binding.txtAuthor2.setText(selectedManga.getInformation().getAuthors().get(0).getName().toString());
+        binding.txtChapNum.setText(selectedManga.getInformation().getChapters().toString());
+
         String url_ = selectedManga.getPictureUrl();
 
         Glide.with(requireContext())
