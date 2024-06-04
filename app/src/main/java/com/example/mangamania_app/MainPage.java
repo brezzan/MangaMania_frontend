@@ -42,21 +42,6 @@ public class MainPage extends Fragment {
     private MangaViewModel mangaViewModel;
     private ExecutorService srv;
 
-    private Handler logoutHandler = new Handler(new Handler.Callback() {
-        @Override
-        public boolean handleMessage(@NonNull Message msg) {
-            if (msg.what == 1) {
-                Toast.makeText(getActivity(), "Logout successful", Toast.LENGTH_SHORT).show();
-                NavController navController = Navigation.findNavController(requireActivity(), R.id.fragmentContainerView);
-                navController.navigate(R.id.action_mainPage_to_profilePage);
-            } else {
-                Toast.makeText(getActivity(), "Logout failed: " + msg.obj, Toast.LENGTH_SHORT).show();
-            }
-            return true;
-        }
-    });
-
-
     private Handler mangahandler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(@NonNull Message msg) {
@@ -96,16 +81,6 @@ public class MainPage extends Fragment {
 
         binding = FragmentMainPageBinding.inflate(inflater, container, false);
 
-
-        binding.btnLogout.setOnClickListener(view -> {
-                String tokenString = loginViewModel.getLoginToken().getValue().getData().getToken();
-                UserRepository repo = new UserRepository();
-                repo.logout(srv, logoutHandler, tokenString);
-                //navController.navigate(R.id.action_mainPage_to_mangaPage);
-        });
-
-
-        // mainpage den profile gidiyor.
         binding.btnProfilePage.setOnClickListener(view -> {
 
             navController.navigate(R.id.action_mainPage_to_profilePage);
@@ -122,8 +97,6 @@ public class MainPage extends Fragment {
 
             }
         });
-
-
 
         return binding.getRoot();
     }

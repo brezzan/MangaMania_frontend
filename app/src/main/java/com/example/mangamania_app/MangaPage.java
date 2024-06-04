@@ -84,9 +84,9 @@ public class MangaPage extends Fragment {
         Manga selectedManga = mangaViewModel.getSelectedManga().getValue();
 
         if (selectedManga != null) {
-            binding.commentPageText.setText(selectedManga.getTitleEn());
+            binding.txtMangaTitle.setText(selectedManga.getTitleEn());
         } else {
-            binding.commentPageText.setText("selected manga null");
+            binding.txtMangaTitle.setText("selected manga null");
         }
 
         binding.txtMangaTitle.setText(selectedManga.getTitleEn().toString());
@@ -110,7 +110,7 @@ public class MangaPage extends Fragment {
 
         chapterViewModel.getChaptersList().observe(getViewLifecycleOwner(), chapters -> {
             if (chapters == null || chapters.equals(new ArrayList<Chapter>())) {
-                binding.commentPageText.setText("There are not any chapters for this manga");
+                binding.txtChapNum.setText("There are not any chapters available for this manga");
             }
             else {
 
