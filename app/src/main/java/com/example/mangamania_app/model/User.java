@@ -1,7 +1,12 @@
 package com.example.mangamania_app.model;
 
 
-public class User {
+import androidx.navigation.NavType;
+
+import java.io.Serializable;
+
+
+public class User  implements Serializable {
 
 
     private String userId;

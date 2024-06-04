@@ -1,5 +1,6 @@
 package com.example.mangamania_app.repo;
 
+
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -8,6 +9,7 @@ import com.example.mangamania_app.model.ErrorResponse;
 import com.example.mangamania_app.model.Token;
 import com.example.mangamania_app.model.Manga;
 import com.example.mangamania_app.model.Favorite;
+import com.example.mangamania_app.repo.JSONtoModelFunctions;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -33,6 +35,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 public class MangaRepository {
 
+
     public void getManga(ExecutorService srv, Handler uiHandler) {
         srv.execute(()->{
 
@@ -47,9 +50,11 @@ public class MangaRepository {
                 while((chr=reader.read())!=-1){
                     buffer.append((char)chr);
                 }
-
+                JSONtoModelFunctions converter = new JSONtoModelFunctions();
                 JSONArray arr = new JSONArray(buffer.toString());
                 List<Manga> data = new ArrayList<>();
+                data = converter.jsontoMangaList(buffer);
+                /*
                 for (int i = 0; i < arr.length(); i++) {
 
                     JSONObject currentObj = arr.getJSONObject(i);
@@ -119,7 +124,7 @@ public class MangaRepository {
                     Manga manga = new Manga(mangaId, titleOv, titleEn, synopsis, alternativeTitles, information, statistics, characters, pictureUrl);
                     data.add(manga);
                 }
-
+*/
 
                 Message message = uiHandler.obtainMessage();
                 message.what = 1; // success

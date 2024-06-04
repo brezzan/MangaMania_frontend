@@ -11,9 +11,61 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="52dp"
-        android:layout_marginTop="272dp"
+        android:layout_marginTop="44dp"
         android:text="Manga Details Page"
         android:textSize="34sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imgManga2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/commentPageText"
+        tools:src="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/txtMangaTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="85dp"
+        android:layout_marginTop="32dp"
+        android:text="TextView"
+        app:layout_constraintStart_toEndOf="@+id/imgManga2"
+        app:layout_constraintTop_toBottomOf="@+id/commentPageText" />
+
+    <TextView
+        android:id="@+id/txtAuthor2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="84dp"
+        android:layout_marginTop="20dp"
+        android:text="TextView"
+        app:layout_constraintStart_toEndOf="@+id/imgManga2"
+        app:layout_constraintTop_toBottomOf="@+id/txtMangaTitle" />
+
+    <TextView
+        android:id="@+id/txtChapNum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="84dp"
+        android:layout_marginTop="24dp"
+        android:text="TextView"
+        app:layout_constraintStart_toEndOf="@+id/imgManga2"
+        app:layout_constraintTop_toBottomOf="@+id/txtAuthor2" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/chapterRecycler"
+        android:layout_width="396dp"
+        android:layout_height="315dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="48dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtChapNum"
+        app:layout_constraintVertical_bias="0.256" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,8 @@
 package com.example.mangamania_app.model;
 
-public class Chapter {
+import java.io.Serializable;
+
+public class Chapter implements Serializable  {
 
 
     private String chapterId;
@@ -9,7 +11,14 @@ public class Chapter {
     private String description;
 
     private Manga manga;  // foreign key to manga @dbref but ı do not know how this will handle it
-
+    public Chapter(String id, String chapterName, int chapterNumber, String description, Manga manga) {
+        super();
+        this.chapterId = id;
+        this.chapterName = chapterName;
+        this.chapterNumber = chapterNumber;
+        this.description = description;
+        this.manga = manga;
+    }
     public Chapter(String chapterName, int chapterNumber, String description, Manga manga) {
         super();
 

@@ -1,10 +1,12 @@
 package com.example.mangamania_app.model;
 
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Manga implements Serializable {
@@ -21,6 +23,9 @@ public class Manga implements Serializable {
     private List<Character> characters;
     private String picture_url;
 
+    public Manga(){
+        super();
+    };
     public Manga(String mangaId,String titleOv, String titleEn, String synopsis, AlternativeTitles alternativeTitles,
                  Information information, Statistics statistics, List<Character> characters, String pictureUrl) {
         super();
@@ -122,7 +127,7 @@ public class Manga implements Serializable {
         this.picture_url = pictureUrl;
     }
 
-    public static class AlternativeTitles {
+    public static class AlternativeTitles implements Serializable  {
         private String japanese;
         private String english;
 
@@ -152,7 +157,7 @@ public class Manga implements Serializable {
         }
     }
 
-    public static class Information {
+    public static class Information implements Serializable  {
 
         private List<Type> types;
         private String volumes;
@@ -265,7 +270,7 @@ public class Manga implements Serializable {
         }
     }
 
-    public static class Type {
+    public static class Type implements Serializable {
         private String name;
         private String url;
 
@@ -287,7 +292,7 @@ public class Manga implements Serializable {
         }
     }
 
-    public static class Statistics {
+    public static class Statistics implements Serializable  {
         private String score;
         private String ranked;
         private String popularity;
@@ -348,7 +353,7 @@ public class Manga implements Serializable {
         }
     }
 
-    public static class Character {
+    public static class Character implements Serializable  {
         private String name;
         private String pictureUrl;
         private String myanimelistUrl;
@@ -403,6 +408,10 @@ public class Manga implements Serializable {
                 ", picture_url='" + picture_url + '\'' +
                 '}';
     }
+
+
+
+
 
 }
 

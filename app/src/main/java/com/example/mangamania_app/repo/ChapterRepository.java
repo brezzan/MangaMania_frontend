@@ -1,27 +1,57 @@
 package com.example.mangamania_app.repo;
+import static java.lang.Integer.parseInt;
+
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 
 import com.example.mangamania_app.model.Chapter;
+import com.example.mangamania_app.repo.JSONtoModelFunctions;
 
+import com.example.mangamania_app.model.Manga;
 import com.google.gson.Gson;
 
 import com.google.gson.reflect.TypeToken;
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
-
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+
+
+
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 
 public class ChapterRepository {
 
-    // chapter adapter ile selected chapter
 
     public void getChapterById(ExecutorService srv, Handler uiHandler,String id) {
 
@@ -30,48 +60,32 @@ public class ChapterRepository {
             try {
 
                 String queryParams = "/?id=" + URLEncoder.encode(id, "UTF-8") ;
+
                 URL url = new URL("http://10.0.2.2:8080/mangamania/chapter"+queryParams);
-                urlConnection = (HttpURLConnection) url.openConnection();
-                urlConnection.setRequestMethod("GET");
-                urlConnection.setRequestProperty("Accept", "application/json");
 
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
-                int responseCode = urlConnection.getResponseCode();
-
-                if (responseCode == HttpURLConnection.HTTP_OK) {
-                    try (BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()))) {
-                        StringBuilder response = new StringBuilder();
-                        String inputLine;
-                        while ((inputLine = in.readLine()) != null) {
-                            response.append(inputLine);
-                        }
-
-                        // new TypeToken<   ....>
-                        Gson gson = new Gson();
-                        Chapter jsonResponse = gson.fromJson(response.toString(), new TypeToken<Chapter>() {}.getType());
-
-                            Message message = uiHandler.obtainMessage();
-                            message.what = 1; // success
-                            message.obj = jsonResponse;
-                            uiHandler.sendMessage(message);
-
-                    }
-                } else {
-
-                    Message message = uiHandler.obtainMessage();
-                    message.what = 0; // failure
-                    message.obj = "Could not get the chapter by its id" + responseCode;
-                    uiHandler.sendMessage(message);
+                BufferedInputStream reader = new BufferedInputStream(conn.getInputStream());
+                StringBuilder buffer = new StringBuilder();
+                int chr = 0;
+                while((chr=reader.read())!=-1){
+                    buffer.append((char)chr);
                 }
-            } catch (Exception e) {
+
+                JSONtoModelFunctions converter = new JSONtoModelFunctions();
+
+                List<Chapter> data = new ArrayList<>();
+                data = converter.jsontoChapterList(buffer);
+
                 Message message = uiHandler.obtainMessage();
-                message.what = 0; // failure
-                message.obj = "Exception 1: " + e.getMessage();
+                message.what = 1; // success
+                message.obj = data;
                 uiHandler.sendMessage(message);
-            } finally {
-                if (urlConnection != null) {
-                    urlConnection.disconnect();
-                }
+
+            } catch (MalformedURLException e) {
+                throw new RuntimeException(e);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
         });
     }
@@ -81,61 +95,36 @@ public class ChapterRepository {
     public void getChaptersOfManga(ExecutorService srv, Handler uiHandler, String mangaId) {
 
         srv.execute(() -> {
-            HttpURLConnection urlConnection = null;
-            try {
+                try {
 
-                String queryParams = "?id=" + URLEncoder.encode(mangaId, "UTF-8") ;
+                    String queryParams = "?id=" + URLEncoder.encode(mangaId, "UTF-8") ;
 
-                URL url = new URL("http://10.0.2.2:8080/mangamania/chapter/search/mangaid/"+queryParams);
+                    URL url = new URL("http://10.0.2.2:8080/mangamania/chapter/search/mangaid/"+queryParams);
 
-                urlConnection = (HttpURLConnection) url.openConnection();
-                urlConnection.setRequestMethod("GET");
-                urlConnection.setRequestProperty("Content-Type", "application/json; utf-8");
-                urlConnection.setRequestProperty("Accept", "application/json");
-                urlConnection.setDoOutput(true);
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
-
-                int responseCode = urlConnection.getResponseCode();
-
-
-                if (responseCode == HttpURLConnection.HTTP_OK) {
-                    try (BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()))) {
-                        StringBuilder response = new StringBuilder();
-                        String inputLine;
-                        while ((inputLine = in.readLine()) != null) {
-                            response.append(inputLine);
-                        }
-
-                        // new TypeToken<   ....>
-                        Gson gson = new Gson();
-                        List<Chapter> jsonResponse = gson.fromJson(response.toString(), new TypeToken<List<Chapter>>() {}.getType());
-
-                        // list of chapter  or []
-
-
-                            Message message = uiHandler.obtainMessage();
-                            message.what = 1; // success
-                            message.obj = jsonResponse;
-                            uiHandler.sendMessage(message);
-
+                    BufferedInputStream reader = new BufferedInputStream(conn.getInputStream());
+                    StringBuilder buffer = new StringBuilder();
+                    int chr = 0;
+                    while((chr=reader.read())!=-1){
+                        buffer.append((char)chr);
                     }
-                } else {
+                    Log.i("is it empty",""+buffer.toString().substring(0,2));
+                    JSONtoModelFunctions converter = new JSONtoModelFunctions();
+
+                    List<Chapter> data = new ArrayList<>();
+                    data = converter.jsontoChapterList(buffer);
 
                     Message message = uiHandler.obtainMessage();
-                    message.what = 0;
-                    message.obj = "Could not get mangas" + responseCode;
+                    message.what = 1; // success
+                    message.obj = data;
                     uiHandler.sendMessage(message);
+
+                } catch (MalformedURLException e) {
+                    throw new RuntimeException(e);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
                 }
-            } catch (Exception e) {
-                Message message = uiHandler.obtainMessage();
-                message.what = 0; // failure
-                message.obj = "Exception 1: " + e.getMessage();
-                uiHandler.sendMessage(message);
-            } finally {
-                if (urlConnection != null) {
-                    urlConnection.disconnect();
-                }
-            }
         });
     }
 }

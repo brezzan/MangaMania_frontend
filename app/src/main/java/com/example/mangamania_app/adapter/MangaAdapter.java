@@ -1,5 +1,7 @@
 package com.example.mangamania_app.adapter;
 
+import static android.os.FileUtils.copy;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,11 +13,16 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
 import androidx.recyclerview.widget.RecyclerView;
 
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.Target;
 import com.example.mangamania_app.R;
 import com.example.mangamania_app.model.Manga;
 import com.example.mangamania_app.viewModel.MangaViewModel;
+
 
 import java.util.List;
 
@@ -24,23 +31,19 @@ public class MangaAdapter extends RecyclerView.Adapter<MangaAdapter.MangaViewHol
     Context context;
     List<Manga> mangaList;
     MangaViewModel mangaViewModel;
+    NavController navController;
 
-    MangaClickListener listener;
-
-    interface  MangaClickListener {
-        void mangaClicked(Manga manga);
-    }
-
-    public MangaAdapter(Context context,MangaViewModel mangaViewModel) {
+    public MangaAdapter(Context context, MangaViewModel mangaViewModel, NavController navController) {
         this.context = context;
-        this.mangaViewModel = new ViewModelProvider((AppCompatActivity)context).get(MangaViewModel.class);
+        this.mangaViewModel = new ViewModelProvider((AppCompatActivity) context).get(MangaViewModel.class);
+        this.navController = navController;
         mangaList = mangaViewModel.getMangaList().getValue();
     }
 
+    @NonNull
     @Override
     public MangaViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View root=  LayoutInflater.from(context).inflate(R.layout.manga_row, parent, false);
-
+        View root = LayoutInflater.from(context).inflate(R.layout.manga_row, parent, false);
         return new MangaViewHolder(root);
     }
 
@@ -50,17 +53,24 @@ public class MangaAdapter extends RecyclerView.Adapter<MangaAdapter.MangaViewHol
             mangaList = mangaViewModel.getMangaList().getValue();
         }
         Manga manga = mangaList.get(position);
-        holder.txtManga.setText(manga.getTitleEn().toString());
-        holder.txtAuthor.setText(manga.getInformation().getAuthors().get(0).getName().toString());
 
         holder.row.setOnClickListener(v -> {
-            if (listener != null) {
-                listener.mangaClicked(manga);
-            }
-            mangaViewModel.setSelectedManga(manga);
+            mangaViewModel.setSelectedManga(manga); // Set the selected manga
+            navController.navigate(R.id.action_mainPage_to_mangaPage);
         });
 
-        // Bind manga data to ViewHolder views here
+        holder.txtManga.setText(manga.getTitleEn());
+        holder.txtAuthor.setText(manga.getInformation().getAuthors().get(0).getName());
+
+        String url_ = manga.getPictureUrl();
+
+        Glide.with(context)
+                .load(url_)
+                .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+                .placeholder(R.drawable.black_image)
+                .error(R.drawable.black_image)
+                .centerCrop()
+                .into(holder.img);
     }
 
     @Override
@@ -71,12 +81,7 @@ public class MangaAdapter extends RecyclerView.Adapter<MangaAdapter.MangaViewHol
         return mangaList.size();
     }
 
-    public void setListener(MangaClickListener listener) {
-        this.listener = listener;
-    }
-
     class MangaViewHolder extends RecyclerView.ViewHolder {
-
         TextView txtManga;
         TextView txtAuthor;
         ImageView img;
@@ -85,10 +90,9 @@ public class MangaAdapter extends RecyclerView.Adapter<MangaAdapter.MangaViewHol
         public MangaViewHolder(@NonNull View itemView) {
             super(itemView);
             row = (ConstraintLayout) itemView;
-            txtManga = itemView.findViewById(R.id.txtDate);
-            txtAuthor = itemView.findViewById(R.id.txtName3);
-
-            // img = itemView.findViewById(R.id.);
+            img = itemView.findViewById(R.id.imgManga);
+            txtManga = itemView.findViewById(R.id.txtChapterName);
+            txtAuthor = itemView.findViewById(R.id.txtAuthor);
         }
     }
 }

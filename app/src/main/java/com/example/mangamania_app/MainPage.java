@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Toast;
 
 import androidx.navigation.NavController;
@@ -85,9 +86,12 @@ public class MainPage extends Fragment {
 
         WebApp app = (WebApp) requireActivity().getApplication();
         srv = app.srv;
-        mangaViewModel = new ViewModelProvider(this).get(MangaViewModel.class);
+
+        mangaViewModel = new ViewModelProvider(requireActivity()).get(MangaViewModel.class); // Use activity scope
+
         MangaRepository mangaRepo = new MangaRepository();
         mangaRepo.getManga(srv, mangahandler);
+        NavController navController = Navigation.findNavController(requireActivity(), R.id.fragmentContainerView);
 
         binding = FragmentMainPageBinding.inflate(inflater, container, false);
 
@@ -103,13 +107,14 @@ public class MainPage extends Fragment {
                 binding.mainAppPageText.setText("0");
             } else {
 
-                MangaAdapter adp = new MangaAdapter(this.getContext(),mangaViewModel);
-
+                MangaAdapter adp = new MangaAdapter(this.getContext(), mangaViewModel,navController);
                 binding.mangaRecycler.setAdapter(adp);
                 binding.mangaRecycler.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
 
             }
         });
+
+
 
         return binding.getRoot();
     }

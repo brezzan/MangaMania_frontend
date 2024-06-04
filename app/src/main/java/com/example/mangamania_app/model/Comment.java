@@ -1,8 +1,9 @@
 package com.example.mangamania_app.model;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Comment {
+public class Comment implements Serializable {
 
 
    private String commentId;
@@ -11,9 +12,6 @@ public class Comment {
 
     private String commentText;
     private String date;
-
-
-
 
     private List<User> likes;     // list of user id's that liked/ disliked a specific comment @DBRef
 
@@ -25,8 +23,19 @@ public class Comment {
 
     private Chapter chapter;     // foreign key to chapter  @DBRef
 
-    // foreign key to manga
+    public Comment(String id, User userCommented, String commentText, String date, List<User> likes, List<User> dislikes,
+                   Comment rootComment, Chapter chapter) {
+        super();
+        this.commentId = id;
+        this.userCommented = userCommented;
+        this.commentText = commentText;
+        this.date = date;
+        this.likes = likes;
+        this.dislikes = dislikes;
+        this.rootComment = rootComment;
+        this.chapter = chapter;
 
+    }
 
     public Comment(User userCommented, String commentText, String date, List<User> likes, List<User> dislikes,
                    Comment rootComment, Chapter chapter) {
